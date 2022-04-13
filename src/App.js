@@ -13,6 +13,7 @@ function App() {
   const [session, setSession] = useState(25)
   const [min, setMin] = useState(0)
   const [sec, setSec] = useState(0)
+  const [on, setOn] = useState(false)
   
   let seconds
  
@@ -22,30 +23,34 @@ function App() {
   d.setMinutes(d.getMinutes() + session)
   // console.log(d)
   var countDownDate = d.getTime();
-  console.log('session date', countDownDate)
+  // console.log('session date', countDownDate)
 
   // Update the count down every 1 second
   
-  // useEffect(() => setInterval(function() {
+  useEffect(() => {
+    if (on == true) {
+      var x = setInterval(function() {
 
-  //   // Get today's date and time
-  //   var now = new Date().getTime();
+    // Get today's date and time
+    var now = new Date().getTime();
 
-  //   // Find the distance between now and the count down date
-  //   var distance = countDownDate - now;
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
 
-  //   // Time calculations for days, hours, minutes and seconds
+    // Time calculations for days, hours, minutes and seconds
    
-  //   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  //   seconds = Math.floor((distance % (1000 * 60)) / 1000) + 1;
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    seconds = Math.floor((distance % (1000 * 60)) / 1000) + 1;
     
     
-  //   console.log(minutes, ':', seconds)
-  //   setMin(minutes)
-  //   setSec(seconds)
+    console.log(minutes, ':', seconds)
+    setMin(minutes)
+    setSec(seconds)
 
 
-  // }, 1000), []);
+  }, 1000)}
+  else clearInterval(x)
+  }, [on]);
   
 
 
@@ -83,7 +88,7 @@ function App() {
         </div>
       </div>
       <div className="controls">
-        <FaPlay className='ctrl' />
+        <FaPlay className='ctrl' onClick={() => setOn(!on)} />
         <FaPause className='ctrl' />
         <MdReplayCircleFilled className='ctrl' />
       </div>

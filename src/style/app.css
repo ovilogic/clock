@@ -28,14 +28,26 @@
     }
 
     .break, .session {
-        margin: 5px 20px;
+        margin: 5px 10px;
+        width: 100px;
     }
+
+    
 
     display {
-        width: 90%;
+        min-height: 200px;
+        width: 150px;
+    }
+}
+
+@media only screen and (min-height: 400px) and (max-height: 600px) {
+    .App {
+        margin: 5px;
     }
 
-
+    h1 {
+        margin-bottom: 0px;
+    }
 }
 
 .panel {
