@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './style/app.css'
 import { BsArrowDownCircleFill, BsArrowUpCircleFill  } from 'react-icons/bs'
 import { FaPlay, FaPause } from 'react-icons/fa'
@@ -14,38 +14,39 @@ function App() {
   const [min, setMin] = useState(0)
   const [sec, setSec] = useState(0)
   
-  
-
-  const newTime = new Date()
-  
-  // newTime.setMinutes(newTime.getMinutes() + session)
-  // let n = newTime.getTime()
+  let seconds
  
-
-  // const now = new Date().getTime()
-
-  // let difference = n - now
+  const d = new Date()
+  // console.log(d)
   
+  d.setMinutes(d.getMinutes() + session)
+  // console.log(d)
+  var countDownDate = d.getTime();
+  console.log('session date', countDownDate)
 
-  // console.log(difference)
+  // Update the count down every 1 second
+  
+  // useEffect(() => setInterval(function() {
 
+  //   // Get today's date and time
+  //   var now = new Date().getTime();
 
-  // // setInterval(() => {
- 
+  //   // Find the distance between now and the count down date
+  //   var distance = countDownDate - now;
 
-  // //   var minutes = Math.floor(difference / (1000 * 60))
+  //   // Time calculations for days, hours, minutes and seconds
    
-  // //   setMin(minutes)
+  //   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  //   seconds = Math.floor((distance % (1000 * 60)) / 1000) + 1;
     
-  //   }, 60000)
-
-  // setInterval(() => {
- 
-   
-  //   var seconds = Math.floor((difference % (1000 * 60)) / 1000)
-
+    
+  //   console.log(minutes, ':', seconds)
+  //   setMin(minutes)
   //   setSec(seconds)
-  // }, 1000)
+
+
+  // }, 1000), []);
+  
 
 
   return (
