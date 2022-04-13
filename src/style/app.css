@@ -2,18 +2,155 @@
     color: rgb(1, 1, 73);
 }
 
-h1 {
+.App {
+    /* outline: 1px red solid; */
+    margin: 10vh auto;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@media only screen and (max-width: 400px) {
+    * {
+        font-size: 15px;
+        
+    }
+
+    .App {
+        height: 90vh;
+        width: 90vw;
+    }
+
+    panel {
+        height: 30%;
+    }
+
+    .break, .session {
+        margin: 5px 20px;
+    }
+
+    display {
+        width: 90%;
+    }
+
+
+}
+
+.panel {
+    /* outline: 1px yellow dotted; */
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+
+    h1 {
+        text-align: center;
+    }
+
+    .break, .session {
+        
+       margin: 20px;
+       width: 200px;
+        
+    }
+
+        .break h2, .session h2 {
+            /* outline: 1px magenta dotted; */
+            text-align: center;
+        }
+
+    .functions {
+        /* outline: 2px dotted dodgerblue; */
+        padding: 5%;
+        text-align: center;
+        
+        
+    }
+
+        .dArrow, .uArrow, .brk-session {
+            /* outline: 1px fuchsia dotted; */
+            width: 45px;
+            height: 45px;
+            display: inline-block;
+        }
+
+        .brk-session {
+            /* outline: 1px magenta dotted; */
+            font-size: xxx-large;
+            font-family: monospace;
+
+        }
+
+
+.display {
+    
+    border: 5px solid whitesmoke;
+    border-radius: 15px;
+    height: 200px;
+    width: 300px;
+    position: relative;
+    top: 10px;
+    
+}   
+
+    .display h2 {
+        text-align: center;
+    }
+
+    .timer {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        /* outline: 1px fuchsia dotted; */
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .current {
+            font-size: xxx-large;
+            color: floralwhite;
+        }
+
+.controls {
+    height: 50px;
+    width: 150px;
+    /* outline: 1px magenta dashed; */
+    position: relative;
+    top: 20px;
     text-align: center;
 }
 
-.break, .session {
-    display: inline-block;
-    margin: 5px 20px;
-}
+    .ctrl {
+        display: inline-block;
+        height: 90%;
+        width: auto;
+        /* outline: 2px magenta dashed;         */
+    }
 
-.display {
-    display: flex;
-    flex-direction: column;
+    .footer {
+        font-family: 'Courier New', Courier, monospace;
+    }
     
-}
-
+    .footer h5 {
+        text-align: center;
+    }
+    
+    .footer a {
+        text-decoration: none;
+        color: greenyellow;
+    }
+       

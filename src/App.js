@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import './style/app.css'
+import { BsArrowDownCircleFill, BsArrowUpCircleFill  } from 'react-icons/bs'
+import { FaPlay, FaPause } from 'react-icons/fa'
+import { MdReplayCircleFilled } from 'react-icons/md'
+
+
 
 function App() {
   
   const [current, setCurrent] = useState('session')
+  const [brk, setBrk] = useState(5)
   const [session, setSession] = useState(25)
   const [min, setMin] = useState(0)
   const [sec, setSec] = useState(0)
@@ -42,33 +48,48 @@ function App() {
   // }, 1000)
 
 
-
-
-
   return (
     <div className="App">
       <h1>25 + 5 Clock</h1>
       <div className="panel">
-        <div className='break'>
+        <div className='break' id='break-label'>
           <h2>break length</h2>
-          <div className='functions'></div>
+          
+          <div className='functions'>
+          <BsArrowDownCircleFill className='dArrow'
+             id='break-decrement' />
+          <div className='brk-session'>{brk}</div>
+          <BsArrowUpCircleFill className='uArrow'
+            id='break-increment'/>
+          </div>
         </div>
-        <div className='session'>
+        <div className='session' id='session-label'>
           <h2>session length</h2>
-          <div className='functions'></div>
+          
+          <div className='functions'>
+            <BsArrowDownCircleFill className='dArrow'
+              id='session-decrement' />
+            <div className='brk-session'>{session}</div>
+            <BsArrowUpCircleFill className='uArrow'
+              id='session-increment'/>
+          </div>
         </div>
       </div>
       <div className="display">
         <h2>{current}</h2>
         <div className='timer'>
-          {min}:{sec}
+          <div className='current'>{min}:{sec}</div>
         </div>
       </div>
       <div className="controls">
-
+        <FaPlay className='ctrl' />
+        <FaPause className='ctrl' />
+        <MdReplayCircleFilled className='ctrl' />
       </div>
       <div className="footer">
-
+        <h5>made by 
+          <a href='https://github.com/ovilogic'> ovilogic</a>
+          </h5>
       </div>
     </div>
   );
