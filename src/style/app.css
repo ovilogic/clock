@@ -2,6 +2,11 @@
     color: rgb(1, 1, 73);
 }
 
+::selection {
+    
+    background: none;
+}
+
 .App {
     /* outline: 1px red solid; */
     margin: 10vh auto;
