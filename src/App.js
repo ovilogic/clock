@@ -12,7 +12,7 @@ function App() {
   const [brk, setBrk] = useState(5)
   const [session, setSession] = useState(25)
   const [min, setMin] = useState(session)
-  const [sec, setSec] = useState('60')
+  const [sec, setSec] = useState('00')
   const [on, setOn] = useState(0)
   // on: if you hit play or pause, it changes. Also the 3rd useEffect
   // gets going, which sets off a new function. 
@@ -123,7 +123,8 @@ function App() {
         }
       
       if (tLabel.current.innerText == 'session' &&
-        clock.current.innerText == '0' + session + ':00' ) {
+        clock.current.innerText == '0' + session + ':00' ||
+        clock.current.innerText == session + ':00' ) {
       
         d.setMinutes(d.getMinutes() + session);
         countDownDate = d.getTime()
@@ -255,7 +256,12 @@ function App() {
           <BsArrowUpCircleFill className='uArrow'
            onClick={() => {
              if (on > 0) {  }
-             else setBrk(brk + 1)}}
+             else {
+               if (brk < 60) {
+             setBrk(brk + 1)}
+                }
+              }
+            }
             id='break-increment'/>
           </div>
         </div>
@@ -278,8 +284,9 @@ function App() {
              onClick={() => {
                if (on > 0) {  }
                else {
+                 if (session < 60) {
               setSession(session + 1);
-              clock.current.innerText = session + 1 + ':00'}
+              clock.current.innerText = session + 1 + ':00'}}
             }}
               id='session-increment'/>
           </div>
