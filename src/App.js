@@ -12,70 +12,92 @@ function App() {
   const [brk, setBrk] = useState(5)
   const [session, setSession] = useState(25)
   const [min, setMin] = useState(session)
-  const [sec, setSec] = useState('00')
+  const [sec, setSec] = useState('60')
   const [on, setOn] = useState(0)
-  const clock = useRef('')
+  // on: if you hit play or pause, it changes. Also the 3rd useEffect
+  // gets going, which sets off a new function. 
+  
   const [dist, setDist] = useState(0)
   const [red, setRed] = useState({})
 
+  const clock = useRef()
+  const tLabel = useRef()
 
 
   let parsed
-  var audio = new Audio("https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav");
-  
-  if (current == 'break') audio.play();
 
-  useEffect(() => {
-    
+  const prettyMinutes = () => {
     parsed = clock.current.innerText.split(':')
-  
-    console.log(parsed)
-    console.log(Number(parsed[0]))
-    if ( Number(parsed[0]) == 0) {
-      setRed({ color: 'red' })
-    }
-    if (Number(parsed[0]) == '00' && Number(parsed[1]) == '00') {
-      setCurrent('break');
-      
-      
-    }
 
-  })
-
-  useEffect(() => {
-    if (current == 'break') audio.play()
-  }, [current])
-  
-
-  useEffect(() => {
-    parsed = clock.current.innerText.split(':')
-    // console.log(parsed)
     if (parsed[0].length < 2 ) {
       parsed[0] = '0' + parsed[0]
-      // console.log(parsed)
+
       clock.current.innerText = parsed.join(':')
     }
-
+  }
   
 
+
+  var audio = new Audio("https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav");
+  
+
+
+  // 1. Only when the min changes (in setInterval by setMin).
+  // Prepare for break at t-1 minute:
+  useEffect(() => {
+    console.log('1st useEffect rendered')
+    
+    parsed = clock.current.innerText.split(':')
+
+
+    // Prepare for a break:
+ 
+    if ( Number(parsed[0]) == 0 ) {
+      setRed({ color: 'red' })
+      
+    }
+    else if ( Number(parsed[0]) != 0) {setRed({})}
+    
+    if ( Number(parsed[0]) == -1 && Number(parsed[1]) == 0
+    && tLabel.current.innerText == 'session' ) {
+      // We go to break mode:
+      console.log('We go to break mode:')
+      setCurrent('break');
+      audio.play()
+      parsed[0] = brk
+    }
+    else if (Number(parsed[0]) == -1 && Number(parsed[1]) == 0
+    && tLabel.current.innerText == 'break' ) {
+      console.log('We go to sesssion mode:')
+      setCurrent('session');
+      audio.play()
+      parsed[0] = session
+    }
+
+    // Rewind the clock:
+    
+    clock.current.innerText = parsed.join(':');
+    prettyMinutes()
+  }, [min])
+
+
+  
+  // 2.Only when the session counter changes (up-down arrows).
+  // Make the minutes pretty:
+  useEffect(() => {
+    console.log('2nd useEffect rendered')
+    prettyMinutes()
+    console.log('2nd useEffect: makes minutes pretty:', clock.current.innerText)
+    
   }, [session])
  
- 
 
-  // const auszeit = () => {
-  //   parsed = clock.current.innerText.split(':')
-    
-
-  
-  // }
-
-
-  
+  console.log(on)
 
   var x
-  
-
+ 
   useEffect(() => {
+    console.log('3rd useEffect rendered')
 
     // You don't want variables outside useEffect because they will be updated with each
     // new render. Had d been defined outside, it would create a new time 0 (d) with each 
@@ -86,64 +108,67 @@ function App() {
     // from 0 to 1). 
 
     var d = new Date()
-    
-      
-    
-    if (on == 1) {
-      
-      // console.log(d)
-      d.setMinutes(d.getMinutes() + session)
-      // console.log(d, 'minutes added')
-      var countDownDate = d.getTime();
 
-    }
+    var countDownDate
+
     x = setInterval(() => {
+
+      prettyMinutes()
+
+      if (tLabel.current.innerText == 'break' &&
+          clock.current.innerText == '0' + brk + ':00' ) {
+          
+          d.setMinutes(d.getMinutes() + brk);
+          countDownDate = d.getTime()
+        }
+      
+      if (tLabel.current.innerText == 'session' &&
+        clock.current.innerText == '0' + session + ':00' ) {
+      
+        d.setMinutes(d.getMinutes() + session);
+        countDownDate = d.getTime()
+      }
+
+      console.log('setInterval function started')
+      if (on == 0) clearInterval(x)
    
       if (on == 1) {
         
-      // console.log('on = 1')
-      
-      
-      var now = new Date().getTime();
 
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
-      // console.log('one: distance: ', distance)
+        var now = new Date().getTime();
 
-      // Time calculations for days, hours, minutes and seconds
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+          
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000) + 1;
         
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000) + 1;
-      
-      // Making the seconds and minutes look pretty:
-      
-      seconds = String(seconds)
-      minutes = String(minutes)
-      
-
-      if (seconds == '60') {
-        seconds = '00'}
+        // Making the seconds and minutes look pretty:
         
-      if ( seconds.length == 1) {
-        seconds = '0' + seconds
-      }
+        seconds = String(seconds)
+        minutes = String(minutes)
+        
 
-      if ( minutes.length == 1) {
-        minutes = '0' + minutes
-      }
-      // console.log(minutes, ':', seconds)
+        if (seconds == '60') {
+          seconds = '00'}
+          
+        if ( seconds.length == 1) {
+          seconds = '0' + seconds
+        }
 
-      // And the final product sent to the screen:
-      clock.current.innerText = minutes + ':' + seconds
-      // auszeit()
+        if ( minutes.length == 1) {
+          minutes = '0' + minutes
+        }
+    
+        // And the final product sent to the screen:
+        clock.current.innerText = minutes + ':' + seconds
 
-      
+        setMin(minutes)
+        setSec(seconds)
+        setDist(distance)
 
-      setMin(minutes)
-      setSec(seconds)
-      setDist(distance)
-
-      // console.log('on = 1', 'countDwn exiting 1', countDownDate, 'and distance ', distance)
       }
 
       else if (on == 2) {
@@ -151,14 +176,11 @@ function App() {
       }
 
       else if (on == 3) {
-        // console.log('d entering 3 ', d, 'distance is', dist)
+
         countDownDate = d.getTime() + dist
-        
-    
-          // console.log('on is 3', countDownDate)
-          
+
           var now = new Date().getTime();
-          // console.log('third', now)
+        
     
           // Find the distance between now and the count down date
           let distance = countDownDate - now;
@@ -185,27 +207,27 @@ function App() {
             minutes = '0' + minutes
           }
 
-          
-          // console.log(minutes, ':', seconds)
+
     
           // And the final product sent to the screen:
           clock.current.innerText = minutes + ':' + seconds
-          // auszeit();
+
 
           setMin(minutes)
           setSec(seconds)
           setDist(distance)
         }
-
+        console.log('setInterval function at the end')
         }, 1000);
     
      
 
      return () => {
-       
+       console.log('clearing setInterval')
        clearInterval(x);
+       console.log('after setInterval has been cleared')
      }
-
+     console.log('end of 3rd useEffect')
     }, [on]); 
     
     
@@ -223,7 +245,9 @@ function App() {
           <BsArrowDownCircleFill className='dArrow'
            onClick={() => {
              if (on > 0) {  }
-             else setBrk(brk - 1)}}
+             else {
+               if (brk > 1) {
+                 setBrk(brk - 1)}}}}
              id='break-decrement' />
           <div className='brk-session' id='break-length'>
             {brk}
@@ -243,8 +267,9 @@ function App() {
              onClick={() => {
               if (on > 0) {  }
               else {
+                if (session > 1) {
               setSession(session - 1);
-              clock.current.innerText = session - 1 + ':00'}
+              clock.current.innerText = session - 1 + ':00'}}
             }}
               id='session-decrement' />
             <div className='brk-session'
@@ -261,7 +286,8 @@ function App() {
         </div>
       </div>
     <div className="display" >
-        <h1 id='timer-label' style={red}>{current}</h1>
+        <h1 id='timer-label'
+          ref={tLabel} style={red}>{current}</h1>
         <div className='timer'>
           <div className='current'
             id='time-left'
@@ -304,10 +330,12 @@ function App() {
           id='reset' onClick={() => {
               setSession(25);
               setBrk(5);
-              clock.current.innerText = 25 + ':00';
+          
               setDist(0);
               setOn(0);
               clearInterval(x);
+              setMin(25);
+              clock.current.innerText = '25:00'
             }}/>
       </div>
       <div className="footer">
